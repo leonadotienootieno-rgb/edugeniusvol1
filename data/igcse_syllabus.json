@@ -1,0 +1,376 @@
+{
+  "curriculum": "Cambridge IGCSE",
+  "subjects": {
+    "Biology (0610)": {
+      "code": "0610",
+      "topics": {
+        "Form 1 Equivalent": {
+          "Characteristics of Living Organisms": [
+            "Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition",
+            "Classification systems and binomial nomenclature",
+            "Features of the five kingdoms"
+          ],
+          "Cells": [
+            "Cell structure - animal and plant cells",
+            "Functions of organelles - nucleus, cytoplasm, membrane, wall, mitochondria, ribosomes",
+            "Specialized cells - ciliated, root hair, xylem, red blood, sperm, egg",
+            "Magnification calculations",
+            "Diffusion, osmosis, and active transport"
+          ],
+          "Biological Molecules": [
+            "Carbohydrates - monosaccharides, disaccharides, polysaccharides",
+            "Proteins - amino acids, structure",
+            "Lipids - fats and oils",
+            "DNA structure and function",
+            "Food tests - Benedict's, iodine, biuret, ethanol"
+          ],
+          "Enzymes": [
+            "Enzyme structure and function",
+            "Factors affecting enzyme activity - temperature, pH, substrate concentration",
+            "Denaturation",
+            "Lock and key hypothesis"
+          ]
+        },
+        "Form 2 Equivalent": {
+          "Plant Nutrition": [
+            "Photosynthesis - word and chemical equation",
+            "Factors affecting photosynthesis - light, CO2, temperature",
+            "Leaf structure",
+            "Mineral nutrition - nitrates, magnesium",
+            "Deficiency symptoms"
+          ],
+          "Animal Nutrition": [
+            "Balanced diet - nutrients and their functions",
+            "Digestive system - alimentary canal",
+            "Digestion - mechanical and chemical",
+            "Absorption in small intestine",
+            "Assimilation and egestion"
+          ],
+          "Transport in Plants": [
+            "Xylem and phloem structure and function",
+            "Transpiration - factors affecting rate",
+            "Translocation",
+            "Potometer experiments"
+          ],
+          "Transport in Animals": [
+            "Circulatory system - heart, blood vessels",
+            "Blood components and functions",
+            "Double circulation",
+            "Coronary heart disease - causes and prevention"
+          ]
+        },
+        "Form 3 Equivalent": {
+          "Respiration": [
+            "Aerobic respiration - word and chemical equation",
+            "Anaerobic respiration in yeast and muscle cells",
+            "Gas exchange in humans - breathing mechanism",
+            "Effect of exercise on breathing rate"
+          ],
+          "Coordination and Response": [
+            "Nervous system - CNS, PNS",
+            "Reflex arc",
+            "Synapse structure and function",
+            "Eye - structure and accommodation",
+            "Hormones - adrenaline, insulin, glucagon",
+            "Homeostasis - temperature and blood glucose regulation"
+          ],
+          "Excretion": [
+            "Excretory organs - lungs, kidneys, skin",
+            "Kidney structure - nephron",
+            "Urine formation - ultrafiltration and reabsorption",
+            "Dialysis and kidney transplants"
+          ],
+          "Reproduction": [
+            "Asexual vs sexual reproduction",
+            "Plant reproduction - flower structure, pollination, fertilization",
+            "Human reproduction - male and female systems",
+            "Menstrual cycle",
+            "Fertilization and implantation",
+            "Sexually transmitted infections"
+          ]
+        },
+        "Form 4 Equivalent": {
+          "Genetics and Inheritance": [
+            "DNA, genes, and chromosomes",
+            "Mitosis and meiosis",
+            "Monohybrid crosses - dominant and recessive alleles",
+            "Sex determination",
+            "Mutation - causes and effects",
+            "Genetic engineering and cloning"
+          ],
+          "Ecology and Environment": [
+            "Ecosystems - food chains and food webs",
+            "Energy flow and nutrient cycles - carbon and nitrogen",
+            "Population growth",
+            "Human impact - pollution, deforestation, global warming",
+            "Conservation"
+          ],
+          "Biotechnology": [
+            "Fermentation",
+            "Genetic modification",
+            "Industrial uses of enzymes"
+          ]
+        }
+      }
+    },
+    "Chemistry (0620)": {
+      "code": "0620",
+      "topics": {
+        "Form 1 Equivalent": {
+          "States of Matter": [
+            "Solids, liquids, gases - particle theory",
+            "Changes of state - melting, boiling, condensation, freezing",
+            "Diffusion",
+            "Heating and cooling curves"
+          ],
+          "Atoms, Elements, and Compounds": [
+            "Atomic structure - protons, neutrons, electrons",
+            "Atomic number and mass number",
+            "Isotopes",
+            "Electronic configuration (first 20 elements)",
+            "Ions and ionic bonding"
+          ],
+          "Stoichiometry": [
+            "Chemical formulae",
+            "Balancing equations",
+            "Relative atomic mass and relative molecular mass",
+            "Mole concept and Avogadro's constant",
+            "Empirical and molecular formulae",
+            "Percentage yield and purity"
+          ]
+        },
+        "Form 2 Equivalent": {
+          "Chemical Bonding": [
+            "Ionic bonding - structure and properties of ionic compounds",
+            "Covalent bonding - simple molecular and giant covalent",
+            "Metallic bonding",
+            "Properties related to bonding types"
+          ],
+          "Acids, Bases, and Salts": [
+            "Properties of acids and bases",
+            "pH scale and indicators",
+            "Neutralization reactions",
+            "Preparation of salts - soluble and insoluble",
+            "Titration calculations"
+          ],
+          "Periodic Table": [
+            "Periodic trends - groups and periods",
+            "Group 1 - alkali metals",
+            "Group 7 - halogens",
+            "Group 8 - noble gases",
+            "Transition elements"
+          ],
+          "Electrochemistry": [
+            "Electrolysis - principles",
+            "Electrolysis of molten compounds",
+            "Electrolysis of aqueous solutions",
+            "Electroplating",
+            "Simple cells"
+          ]
+        },
+        "Form 3 Equivalent": {
+          "Chemical Energetics": [
+            "Exothermic and endothermic reactions",
+            "Enthalpy changes",
+            "Bond energy calculations",
+            "Fuels and combustion"
+          ],
+          "Rates of Reaction": [
+            "Factors affecting reaction rate - concentration, temperature, surface area, catalyst",
+            "Collision theory",
+            "Interpreting rate graphs",
+            "Catalysts and enzymes"
+          ],
+          "Reversible Reactions": [
+            "Dynamic equilibrium",
+            "Le Chatelier's principle",
+            "Haber process",
+            "Contact process"
+          ],
+          "Organic Chemistry 1": [
+            "Alkanes - structure, properties, combustion",
+            "Alkenes - structure, addition reactions",
+            "Cracking",
+            "Polymers - addition polymerization"
+          ]
+        },
+        "Form 4 Equivalent": {
+          "Organic Chemistry 2": [
+            "Alcohols - ethanol production and reactions",
+            "Carboxylic acids",
+            "Esters - formation and uses",
+            "Condensation polymerization"
+          ],
+          "Chemical Analysis": [
+            "Testing for gases - H2, O2, CO2, Cl2, NH3",
+            "Testing for cations - flame tests, NaOH",
+            "Testing for anions - halides, sulfates, carbonates",
+            "Chromatography"
+          ],
+          "Industrial Chemistry": [
+            "Extraction of metals - iron, aluminium",
+            "Uses of metals and alloys",
+            "Fertilizers",
+            "Air and water quality"
+          ]
+        }
+      }
+    },
+    "Physics (0625)": {
+      "code": "0625",
+      "topics": {
+        "Form 1 Equivalent": {
+          "Motion": [
+            "Speed, velocity, and acceleration",
+            "Distance-time and velocity-time graphs",
+            "Equations of motion",
+            "Free fall - acceleration due to gravity"
+          ],
+          "Forces": [
+            "Types of forces - weight, friction, tension, normal",
+            "Newton's laws of motion",
+            "Resultant forces and equilibrium",
+            "Moment of a force",
+            "Centre of gravity"
+          ],
+          "Energy": [
+            "Forms of energy - kinetic, potential, thermal, chemical",
+            "Energy transfers and conservation",
+            "Work done",
+            "Power",
+            "Efficiency"
+          ]
+        },
+        "Form 2 Equivalent": {
+          "Thermal Physics": [
+            "Temperature and thermometers",
+            "Specific heat capacity",
+            "Specific latent heat",
+            "Heat transfer - conduction, convection, radiation",
+            "Applications of thermal energy transfer"
+          ],
+          "Waves": [
+            "Transverse and longitudinal waves",
+            "Wave equation - v = fλ",
+            "Reflection and refraction",
+            "Diffraction",
+            "Electromagnetic spectrum"
+          ],
+          "Sound": [
+            "Production and propagation of sound",
+            "Speed of sound",
+            "Ultrasound and its applications",
+            "Pitch and loudness"
+          ]
+        },
+        "Form 3 Equivalent": {
+          "Electricity": [
+            "Electric charge and current",
+            "Potential difference and resistance",
+            "Ohm's law",
+            "Series and parallel circuits",
+            "Electrical energy and power",
+            "Mains electricity and safety"
+          ],
+          "Magnetism": [
+            "Magnetic fields - bar magnets and electromagnets",
+            "Magnetic effect of current",
+            "Electric motors",
+            "Electromagnetic induction",
+            "Generators and transformers"
+          ],
+          "Atomic Physics": [
+            "Atomic structure - nucleus and electrons",
+            "Radioactivity - alpha, beta, gamma",
+            "Half-life",
+            "Uses of radioisotopes",
+            "Nuclear fission and fusion"
+          ]
+        },
+        "Form 4 Equivalent": {
+          "Space Physics": [
+            "Solar system",
+            "Stars and galaxies",
+            "Orbits and satellites",
+            "Redshift and Big Bang theory"
+          ],
+          "Electronics": [
+            "Logic gates - AND, OR, NOT, NAND, NOR",
+            "Truth tables",
+            "Thermistors and LDRs",
+            "Diodes and rectification"
+          ]
+        }
+      }
+    },
+    "Mathematics (0580)": {
+      "code": "0580",
+      "topics": {
+        "Form 1 Equivalent": {
+          "Number": [
+            "Integers, fractions, decimals, percentages",
+            "Order of operations",
+            "Ratio and proportion",
+            "Standard form",
+            "Estimation and rounding"
+          ],
+          "Algebra 1": [
+            "Algebraic expressions",
+            "Linear equations",
+            "Simultaneous equations",
+            "Inequalities",
+            "Sequences - arithmetic and geometric"
+          ]
+        },
+        "Form 2 Equivalent": {
+          "Algebra 2": [
+            "Quadratic equations - factorization, formula, completing the square",
+            "Functions and function notation",
+            "Graphs of functions",
+            "Direct and inverse proportion"
+          ],
+          "Geometry 1": [
+            "Angles - parallel lines, polygons",
+            "Triangles - properties, congruence, similarity",
+            "Circle theorems",
+            "Constructions and loci"
+          ]
+        },
+        "Form 3 Equivalent": {
+          "Mensuration": [
+            "Perimeter and area - 2D shapes",
+            "Surface area and volume - 3D shapes",
+            "Arc length and sector area",
+            "Pythagoras theorem",
+            "Trigonometry - sin, cos, tan"
+          ],
+          "Coordinate Geometry": [
+            "Gradient and equation of a line",
+            "Midpoint and distance",
+            "Parallel and perpendicular lines"
+          ]
+        },
+        "Form 4 Equivalent": {
+          "Statistics and Probability": [
+            "Data representation - bar charts, pie charts, histograms",
+            "Mean, median, mode, range",
+            "Cumulative frequency",
+            "Probability - simple and combined events",
+            "Tree diagrams"
+          ],
+          "Vectors and Transformations": [
+            "Vector notation and operations",
+            "Translations, reflections, rotations, enlargements",
+            "Combined transformations"
+          ],
+          "Advanced Topics": [
+            "Differentiation - gradient function, turning points",
+            "Sets and Venn diagrams",
+            "Matrices",
+            "Functions - inverse and composite"
+          ]
+        }
+      }
+    }
+  }
+}

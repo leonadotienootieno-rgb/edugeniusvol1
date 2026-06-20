@@ -1,0 +1,282 @@
+{
+  "curriculum": "International Baccalaureate (IB)",
+  "subjects": {
+    "Biology (SL/HL)": {
+      "code": "IB Bio",
+      "topics": {
+        "Core (SL & HL)": {
+          "Cell Biology": [
+            "Cell theory and microscopy",
+            "Ultrastructure of cells - prokaryotes and eukaryotes",
+            "Membrane structure and transport",
+            "Cell division - mitosis and cell cycle",
+            "Origin of cells"
+          ],
+          "Molecular Biology": [
+            "DNA structure and replication",
+            "Transcription and translation",
+            "Proteins and enzymes",
+            "Cell respiration",
+            "Photosynthesis"
+          ],
+          "Genetics": [
+            "Genes and chromosomes",
+            "Meiosis",
+            "Inheritance patterns",
+            "Genetic modification and biotechnology"
+          ],
+          "Ecology": [
+            "Species, communities, ecosystems",
+            "Energy flow and nutrient cycling",
+            "Carbon cycling and climate change",
+            "Population ecology"
+          ],
+          "Evolution and Biodiversity": [
+            "Evidence for evolution",
+            "Natural selection",
+            "Classification and cladistics",
+            "Biodiversity and conservation"
+          ],
+          "Human Physiology": [
+            "Digestion and absorption",
+            "The blood system",
+            "Defense against disease",
+            "Gas exchange",
+            "Neurons and synapses",
+            "Hormones and homeostasis",
+            "Reproduction"
+          ]
+        },
+        "Additional HL Topics": {
+          "Nucleic Acids": [
+            "DNA structure (detailed)",
+            "DNA replication (detailed)",
+            "Transcription and gene expression",
+            "Translation (detailed)"
+          ],
+          "Metabolism and Respiration": [
+            "Metabolic pathways",
+            "Enzyme inhibitors",
+            "Krebs cycle and electron transport chain",
+            "Photosynthesis - light-dependent and independent reactions"
+          ],
+          "Plant Biology": [
+            "Transport in xylem and phloem",
+            "Plant growth and meristems",
+            "Reproduction in flowering plants",
+            "Plant hormones and responses"
+          ],
+          "Genetics and Evolution": [
+            "Dihybrid crosses and gene linkage",
+            "Polygenic inheritance",
+            "Gene pools and speciation",
+            "Hardy-Weinberg principle"
+          ],
+          "Animal Physiology": [
+            "Immunology - antibodies and vaccination",
+            "Muscle contraction",
+            "Kidney function - osmoregulation",
+            "Sexual reproduction and development"
+          ]
+        }
+      }
+    },
+    "Chemistry (SL/HL)": {
+      "code": "IB Chem",
+      "topics": {
+        "Core (SL & HL)": {
+          "Stoichiometric Relationships": [
+            "Mole concept and Avogadro's constant",
+            "Empirical and molecular formulas",
+            "Balancing equations",
+            "Limiting and excess reactants",
+            "Gas laws and ideal gas equation"
+          ],
+          "Atomic Structure": [
+            "Subatomic particles",
+            "Emission spectra",
+            "Electron configuration",
+            "Orbitals and quantum numbers (HL)"
+          ],
+          "Periodicity": [
+            "Periodic trends",
+            "Group properties - alkali metals, halogens",
+            "Transition elements (HL)",
+            "Period 3 oxides and chlorides"
+          ],
+          "Chemical Bonding and Structure": [
+            "Ionic bonding",
+            "Covalent bonding and VSEPR theory",
+            "Hybridization (HL)",
+            "Intermolecular forces",
+            "Metallic bonding"
+          ],
+          "Energetics/Thermochemistry": [
+            "Enthalpy changes",
+            "Hess's law",
+            "Bond enthalpies",
+            "Born-Haber cycles (HL)",
+            "Entropy and spontaneity (HL)"
+          ],
+          "Chemical Kinetics": [
+            "Rates of reaction",
+            "Rate expression and order (HL)",
+            "Activation energy and Arrhenius (HL)",
+            "Reaction mechanisms (HL)"
+          ],
+          "Equilibrium": [
+            "Dynamic equilibrium",
+            "Equilibrium constant Kc",
+            "Le Chatelier's principle",
+            "Acid-base equilibria (HL)",
+            "Buffer solutions (HL)"
+          ],
+          "Acids and Bases": [
+            "Brønsted-Lowry theory",
+            "pH scale and calculations",
+            "Strong and weak acids/bases",
+            "Titration curves and indicators (HL)",
+            "Ka, Kb, pKa, pKb (HL)"
+          ],
+          "Redox Processes": [
+            "Oxidation numbers",
+            "Redox equations",
+            "Electrochemical cells",
+            "Electrolysis",
+            "Standard electrode potentials (HL)"
+          ],
+          "Organic Chemistry": [
+            "Functional groups and nomenclature",
+            "Alkanes, alkenes, alkynes",
+            "Alcohols, ethers, aldehydes, ketones",
+            "Carboxylic acids and esters",
+            "Reaction mechanisms - SN1, SN2 (HL)",
+            "Stereoisomerism (HL)"
+          ]
+        }
+      }
+    },
+    "Physics (SL/HL)": {
+      "code": "IB Phys",
+      "topics": {
+        "Core (SL & HL)": {
+          "Measurements and Uncertainties": [
+            "SI units and scientific notation",
+            "Uncertainties and errors",
+            "Vectors and scalars"
+          ],
+          "Mechanics": [
+            "Kinematics - motion graphs and equations",
+            "Forces and Newton's laws",
+            "Work, energy, and power",
+            "Momentum and impulse",
+            "Conservation laws"
+          ],
+          "Thermal Physics": [
+            "Temperature and heat",
+            "Specific heat capacity and latent heat",
+            "Ideal gases and kinetic theory",
+            "Thermodynamics (HL)"
+          ],
+          "Waves": [
+            "Simple harmonic motion",
+            "Wave properties and wave equation",
+            "Superposition and interference",
+            "Standing waves",
+            "Doppler effect (HL)"
+          ],
+          "Electricity and Magnetism": [
+            "Electric fields",
+            "Current, resistance, and circuits",
+            "Magnetic fields",
+            "Electromagnetic induction (HL)",
+            "Capacitance (HL)"
+          ],
+          "Circular Motion and Gravitation": [
+            "Centripetal force and acceleration",
+            "Newton's law of gravitation",
+            "Orbital motion",
+            "Gravitational fields (HL)"
+          ],
+          "Atomic and Nuclear Physics": [
+            "Atomic structure and spectra",
+            "Radioactive decay",
+            "Nuclear reactions",
+            "Fission and fusion"
+          ],
+          "Energy Production": [
+            "Energy sources - renewable and non-renewable",
+            "Power generation",
+            "Solar and wind energy",
+            "Environmental impact"
+          ]
+        },
+        "Additional HL Topics": {
+          "Wave Phenomena": [
+            "Diffraction and resolution",
+            "Polarization",
+            "Thin film interference",
+            "Optical instruments"
+          ],
+          "Fields": [
+            "Gravitational fields and potential",
+            "Electric fields and potential",
+            "Magnetic fields and forces",
+            "Electromagnetic induction (detailed)"
+          ],
+          "Quantum Physics": [
+            "Photoelectric effect",
+            "Wave-particle duality",
+            "De Broglie wavelength",
+            "Quantum uncertainty",
+            "Nuclear physics (detailed)"
+          ]
+        }
+      }
+    },
+    "Mathematics (AA & AI)": {
+      "code": "IB Math",
+      "topics": {
+        "Common Core": {
+          "Algebra": [
+            "Sequences and series - arithmetic and geometric",
+            "Exponents and logarithms",
+            "Binomial theorem",
+            "Complex numbers (HL)",
+            "Matrices and systems of equations (HL)"
+          ],
+          "Functions": [
+            "Function notation, domain, range",
+            "Linear, quadratic, rational functions",
+            "Exponential and logarithmic functions",
+            "Trigonometric functions",
+            "Transformations of graphs",
+            "Inverse and composite functions"
+          ],
+          "Geometry and Trigonometry": [
+            "Right triangle trigonometry",
+            "Sine and cosine rules",
+            "Radian measure",
+            "Trigonometric identities and equations",
+            "Vectors in 2D and 3D (HL)"
+          ],
+          "Statistics and Probability": [
+            "Data presentation and measures of central tendency",
+            "Probability rules - addition, multiplication",
+            "Conditional probability",
+            "Probability distributions - binomial, normal",
+            "Hypothesis testing and confidence intervals"
+          ],
+          "Calculus": [
+            "Limits and continuity",
+            "Differentiation - rules and applications",
+            "Integration - techniques and applications",
+            "Differential equations (HL)",
+            "Kinematics applications",
+            "Optimization problems"
+          ]
+        }
+      }
+    }
+  }
+}
