@@ -171,16 +171,20 @@ def page_worksheet_generator():
             curriculum = st.selectbox(
                 "Curriculum",
                 ["Cambridge IGCSE", "International Baccalaureate (IB)"],
-                help="Choose the exam board"
+                help="Choose the exam board",
+                key="curriculum"
             )
         with col2:
             syllabus = load_syllabus(curriculum)
             if syllabus:
                 subjects = list(syllabus["subjects"].keys())
-                subject = st.selectbox("Subject", subjects)
+                subject = st.selectbox("Subject", subjects, key="subject")
             else:
                 st.error("Syllabus data not found")
                 subject = None
+        
+        if syllabus and subject:
+            st.info(f"Selected curriculum: **{curriculum}**  \nSubject: **{subject}**")
         
         st.markdown("### 2. Choose Topic & Settings")
         
