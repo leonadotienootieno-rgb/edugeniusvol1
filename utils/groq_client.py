@@ -144,7 +144,7 @@ Make questions appropriate for {curriculum} level. Include the answer key at the
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-70b-versatile",
+            model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": "Create clear, concise MCQ quizzes with accurate answers."},
                 {"role": "user", "content": prompt}
