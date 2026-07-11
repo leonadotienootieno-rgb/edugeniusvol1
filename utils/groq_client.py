@@ -102,7 +102,7 @@ Generate the complete worksheet now. Make it ready to print and use in class.
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 {"role": "system", "content": "You are an expert teacher who creates high-quality, exam-ready worksheets. Always format output clearly with proper spacing, numbering, and professional layout."},
                 {"role": "user", "content": prompt}
