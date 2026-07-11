@@ -5,21 +5,23 @@ Creates printable worksheets and marking schemes
 
 import streamlit as st
 from datetime import datetime
+from fpdf import FPDF
 
-FPDF = None
-_FPDF_IMPORT_ERROR = None
-
-
-def _load_fpdf():
-    global FPDF, _FPDF_IMPORT_ERROR
-    if FPDF is not None or _FPDF_IMPORT_ERROR is not None:
-        return
-    try:
-        from fpdf import FPDF as _FPDF
-        FPDF = _FPDF
-    except Exception as e:
-        _FPDF_IMPORT_ERROR = e
-
+def sanitize_text(text):
+    """Clean text to remove non-standard characters that crash FPDF"""
+    replacements = {
+        '–': '-',  # en-dash
+        '—': '-',  # em-dash
+        '•': '-',  # bullet
+        '“': '"',  # smart quote
+        '”': '"',  # smart quote
+        '‘': "'",  # smart single quote
+        '’': "'",  # smart single quote
+        '…': '...' # ellipsis
+    }
+    for char, replacement in replacements.items():
+        text = text.replace(char, replacement)
+    return text
 
 def create_worksheet_pdf(
     worksheet_text: str,
@@ -28,20 +30,16 @@ def create_worksheet_pdf(
     curriculum: str
 ) -> bytes:
     """Generate a PDF from worksheet text"""
-    
-    _load_fpdf()
-    if FPDF is None:
-        raise RuntimeError(f"FPDF import failed: {_FPDF_IMPORT_ERROR}")
 
     class WorksheetPDF(FPDF):
         """Custom PDF class for worksheets"""
-        
+
         def header(self):
             self.set_font("Helvetica", "B", 14)
             self.cell(0, 10, "EduGenius Worksheet", align="C", new_x="LMARGIN", new_y="NEXT")
             self.line(self.l_margin, self.get_y(), self.w - self.r_margin, self.get_y())
             self.ln(5)
-        
+
         def footer(self):
             self.set_y(-15)
             self.set_font("Helvetica", "I", 8)
@@ -50,7 +48,7 @@ def create_worksheet_pdf(
     pdf = WorksheetPDF()
     pdf.alias_nb_pages()
     pdf.add_page()
-    
+
     # Title
     pdf.set_font("Helvetica", "B", 16)
     pdf.cell(0, 10, f"{curriculum} - {subject}", align="C", new_x="LMARGIN", new_y="NEXT")
@@ -58,14 +56,16 @@ def create_worksheet_pdf(
     pdf.cell(0, 8, f"Topic: {topic}", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.cell(0, 8, f"Date: {datetime.now().strftime('%B %d, %Y')}", align="C", new_x="LMARGIN", new_y="NEXT")
     pdf.ln(10)
-    
+
     # Content
     pdf.set_font("Helvetica", "", 11)
-    
+
     # Split text into lines and add to PDF
     lines = worksheet_text.split('\n')
     for line in lines:
-        line = line.strip()
+        # Sanitize the line first
+        line = sanitize_text(line.strip())
+        
         if not line:
             pdf.ln(4)
         elif line.startswith('---'):
@@ -87,22 +87,20 @@ def create_worksheet_pdf(
             line = line.replace('°', ' degrees ')
             line = line.replace('→', ' -> ')
             line = line.replace('×', ' x ')
-            
-            try:
-                pdf.multi_cell(0, 6, line)
-            except:
-                pdf.multi_cell(0, 6, line.encode('latin-1', 'replace').decode('latin-1'))
-    
+
+            # Force encode/decode to catch any remaining edge cases
+            safe_line = line.encode('latin-1', 'replace').decode('latin-1')
+            pdf.multi_cell(0, 6, safe_line)
+
     return pdf.output()
 
 def generate_download_button(worksheet_text: str, subject: str, topic: str, curriculum: str):
     """Create a download button for PDF export"""
-    
+
     try:
         pdf_bytes = create_worksheet_pdf(worksheet_text, subject, topic, curriculum)
-        
         filename = f"{curriculum}_{subject}_{topic.replace(' ', '_')}.pdf"
-        
+
         st.download_button(
             label="📥 Download as PDF",
             data=pdf_bytes,
