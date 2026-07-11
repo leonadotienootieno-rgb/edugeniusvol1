@@ -23,15 +23,23 @@ def create_worksheet_pdf(worksheet_text, subject, topic, curriculum):
     # Clean the text: remove non-printable characters
     clean_text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', worksheet_text)
     
+    for para in paragraphs:
+        if para.strip() == "":
+            pdf.ln(4)
+            continue
+        
     # Use multi_cell with a fixed width (190mm is standard for A4) 
     # to prevent the "horizontal space" error.
-    pdf.multi_cell(190, 6, clean_text, align='L')
+    pdf.multi_cell(190, 6,para.strip(), clean_text, align='L')
             
     return pdf.output()
 
 def generate_download_button(worksheet_text, subject, topic, curriculum):
     try:
         pdf_bytes = create_worksheet_pdf(worksheet_text, subject, topic, curriculum)
+
+        safe_filename = f"{curriculum}_{subject}_{topic}.replace(" ", "_")[:50] +  ".pdf"
+        
         st.download_button(
             label="📥 Download as PDF",
             data=pdf_bytes,
@@ -40,4 +48,11 @@ def generate_download_button(worksheet_text, subject, topic, curriculum):
             use_container_width=True
         )
     except Exception as e:
-        st.error(f"PDF generation failed. Please try a different topic.")
+        st.warning("PDF generation is temporarily limited for this specific content. please use the 'Copy Text' button instead."
+        )
+        print(f"PDF Generation Error: {e}")
+        
+
+
+
+
