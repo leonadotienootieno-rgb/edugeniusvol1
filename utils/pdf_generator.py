@@ -4,11 +4,13 @@ Creates printable worksheets and marking schemes
 """
 
 import streamlit as st
+import re
 from datetime import datetime
 from fpdf import FPDF
 
 def sanitize_text(text):
-    """Clean text to remove non-standard characters that crash FPDF"""
+    """Clean text to remove non-standard characters and control codes that crash FPDF"""
+    # Replace common special characters
     replacements = {
         '–': '-',  # en-dash
         '—': '-',  # em-dash
@@ -21,6 +23,9 @@ def sanitize_text(text):
     }
     for char, replacement in replacements.items():
         text = text.replace(char, replacement)
+        
+    # Remove non-printable control characters that break PDF rendering
+    text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', text)
     return text
 
 def create_worksheet_pdf(
@@ -63,7 +68,7 @@ def create_worksheet_pdf(
     # Split text into lines and add to PDF
     lines = worksheet_text.split('\n')
     for line in lines:
-        # Sanitize the line first
+        # Sanitize and strip
         line = sanitize_text(line.strip())
         
         if not line:
@@ -83,14 +88,17 @@ def create_worksheet_pdf(
             pdf.cell(0, 6, line.replace('**', ''), new_x="LMARGIN", new_y="NEXT")
             pdf.set_font("Helvetica", "", 11)
         else:
-            # Handle special characters
-            line = line.replace('°', ' degrees ')
-            line = line.replace('→', ' -> ')
-            line = line.replace('×', ' x ')
+            # Handle special math symbols
+            line = line.replace('°', ' degrees ').replace('→', ' -> ').replace('×', ' x ')
 
-            # Force encode/decode to catch any remaining edge cases
+            # Force encode to Latin-1 to prevent encoding errors
             safe_line = line.encode('latin-1', 'replace').decode('latin-1')
-            pdf.multi_cell(0, 6, safe_line)
+            
+            # Use multi_cell with width=0 to stretch to margins and prevent layout errors
+            if len(safe_line.strip()) > 0:
+                pdf.multi_cell(0, 6, safe_line)
+            else:
+                pdf.ln(4)
 
     return pdf.output()
 
