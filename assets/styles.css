@@ -196,23 +196,85 @@ div[data-testid="stProgress"] > div {
 }
 
 /* Pricing cards */
+.pricing-hero {
+    background: linear-gradient(135deg, #FFF7F2, #FFF1E6);
+    border: 1px solid #FFE0C8;
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    color: #4b5563;
+}
+
 .pricing-card {
-    border: 2px solid #e0e0e0;
-    border-radius: 20px;
-    padding: 32px 24px;
+    border: 1px solid #e5e7eb;
+    background: rgba(255,255,255,0.96);
+    border-radius: 22px;
+    padding: 28px 22px;
     text-align: center;
-    transition: all 0.3s;
+    transition: all 0.25s ease;
+    min-height: 100%;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.05);
 }
 
 .pricing-card:hover {
     border-color: #FF6B35;
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 16px 44px rgba(15,23,42,0.10);
 }
 
 .pricing-card.featured {
     border-color: #FF6B35;
     background: linear-gradient(135deg, #FFF3EB, #FFE8D6);
+}
+
+.pricing-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.pricing-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+    color: #111827;
+}
+
+.pricing-price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #FF6B35;
+    line-height: 1.1;
+}
+
+.pricing-period {
+    color: #6b7280;
+    margin: 6px 0 12px 0;
+}
+
+.pricing-card hr {
+    border: none;
+    border-top: 1px solid rgba(15,23,42,0.08);
+    margin: 16px 0;
+}
+
+.pricing-feature {
+    text-align: left;
+    margin: 8px 0;
+    color: #1f2937;
+    font-size: 0.96rem;
+}
+
+.pricing-feature.muted {
+    color: #9ca3af;
 }
 
 /* Worksheet output */

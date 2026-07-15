@@ -33,7 +33,7 @@ st.set_page_config(
 # LOAD CSS
 # ============================================
 def load_css():
-    css_path = Path(__file__).parent / "assets" / "style.css"
+    css_path = Path(__file__).parent / "assets" / "styles.css"
     if css_path.exists():
         with open(css_path) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
@@ -200,39 +200,46 @@ def page_worksheet():
 # ============================================
 def page_pricing():
     st.markdown('<h1 class="main-header">💎 Choose Your Plan</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Start with 5 free worksheets. Upgrade when you need more.</p>', unsafe_allow_html=True)
-    
+    st.markdown('<p class="sub-header">Start with 5 free worksheets. Upgrade when you need more power, export, and automation.</p>', unsafe_allow_html=True)
+
     plans = get_pricing_plans()
     user = st.session_state.get('firebase_user')
-    
+
+    st.markdown("""
+    <div class="pricing-hero">
+        <div><strong>Fast setup</strong></div>
+        <div>Trusted by teachers, schools, and departments looking for an AI worksheet workflow that feels premium.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns(3)
-    
+
     for col, (plan_key, plan) in zip([col1, col2, col3], plans.items()):
         with col:
             is_popular = plan.get('popular', False)
             card_class = "pricing-card featured" if is_popular else "pricing-card"
-            
+
             popular_badge = ""
             if is_popular:
-                popular_badge = '<div style="background:#FF6B35; color:white; padding:4px 12px; border-radius:20px; display:inline-block; margin-bottom:12px; font-size:0.8rem;">MOST POPULAR</div>'
-            
+                popular_badge = '<div class="pricing-badge">MOST POPULAR</div>'
+
             features_html = ""
             for feature in plan.get('features', []):
-                features_html += f"<p>✅ {feature}</p>"
+                features_html += f"<p class='pricing-feature'>✅ {feature}</p>"
             for feature in plan.get('not_included', []):
-                features_html += f"<p style='color:#999;'>❌ {feature}</p>"
-            
+                features_html += f"<p class='pricing-feature muted'>❌ {feature}</p>"
+
             st.markdown(f"""
             <div class="{card_class}">
                 {popular_badge}
                 <h3>{plan['name']}</h3>
-                <h1 style="font-size:2.5rem; color:#FF6B35;">{plan['price']}</h1>
-                <p style="color:#666;">{plan['period']}</p>
+                <div class="pricing-price">{plan['price']}</div>
+                <p class="pricing-period">{plan['period']}</p>
                 <hr>
                 {features_html}
             </div>
             """, unsafe_allow_html=True)
-            
+
             if plan_key == 'free':
                 if not is_authenticated():
                     if st.button("Get Started Free", use_container_width=True, key="free_start"):
