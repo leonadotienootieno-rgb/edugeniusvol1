@@ -47,6 +47,7 @@ def init_session():
     defaults = {
         'page': 'worksheet',
         'current_worksheet': None,
+        'active_template_mode': 'Worksheet',
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -89,6 +90,21 @@ def page_worksheet():
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown("### ⚡ Teacher shortcuts")
+    shortcut_col1, shortcut_col2, shortcut_col3 = st.columns(3)
+    with shortcut_col1:
+        if st.button("📘 Worksheet", use_container_width=True):
+            st.session_state.active_template_mode = "Worksheet"
+            st.rerun()
+    with shortcut_col2:
+        if st.button("🧠 Quick Quiz", use_container_width=True):
+            st.session_state.active_template_mode = "Quick Quiz"
+            st.rerun()
+    with shortcut_col3:
+        if st.button("📝 Revision Pack", use_container_width=True):
+            st.session_state.active_template_mode = "Revision Pack"
+            st.rerun()
     
     if not is_authenticated():
         st.info("👆 **Sign in from the sidebar** to start generating worksheets. It's free!")
@@ -119,12 +135,14 @@ def page_worksheet():
     
     with st.form("worksheet_form"):
         st.markdown("### 1. Choose Your Template")
+        template_options = ["Worksheet", "Quick Quiz", "Revision Pack"]
         template_mode = st.selectbox(
             "Template Mode",
-            ["Worksheet", "Quick Quiz", "Revision Pack"],
+            template_options,
             help="Pick the classroom output you want to generate.",
-            index=0
+            index=template_options.index(st.session_state.get('active_template_mode', 'Worksheet'))
         )
+        st.session_state.active_template_mode = template_mode
 
         st.markdown("### 2. Curriculum & Subject")
         col1, col2 = st.columns(2)
@@ -230,6 +248,9 @@ def page_worksheet():
                 st.session_state.current_worksheet = None
                 st.rerun()
 
+        if ws.get('template_mode'):
+            st.info(f"💡 Fast reuse: your last asset was a {ws['template_mode']} for {ws['subject']} / {ws['topic']}. Pick a shortcut above to continue building from that workflow.")
+
 # ============================================
 # PAGE: PRICING
 # ============================================
@@ -279,40 +300,45 @@ def page_pricing():
         st.markdown("<div class='school-cta'>School leaders can request rollout support, admin onboarding, and department-level adoption guidance.</div>", unsafe_allow_html=True)
         st.link_button("Request School Demo", "mailto:schools@edugenius.app?subject=EduGenius%20School%20Demo")
 
+    st.markdown("---")
+    st.markdown("### Choose the plan that fits your classroom")
+
     col1, col2, col3 = st.columns(3)
 
     for col, (plan_key, plan) in zip([col1, col2, col3], plans.items()):
         with col:
             is_popular = plan.get('popular', False)
+            card_class = "pricing-card featured" if is_popular else "pricing-card"
 
-            with st.container():
-                if is_popular:
-                    st.markdown('<div class="pricing-badge">MOST POPULAR</div>', unsafe_allow_html=True)
+            st.markdown(f"""
+            <div class="{card_class}">
+                <div class="pricing-badge">{'MOST POPULAR' if is_popular else plan['name'].upper()}</div>
+                <h3>{plan['name']}</h3>
+                <div class="pricing-price">{plan['price']}</div>
+                <div class="pricing-period">{plan['period']}</div>
+                <div style="color:#6b7280; margin-bottom:16px;">{plan.get('description', '')}</div>
+                <hr>
+                <div style="text-align:left;">
+                    {''.join([f'<div class="pricing-feature">✅ {feature}</div>' for feature in plan.get('features', [])])}
+                    {''.join([f'<div class="pricing-feature">❌ {feature}</div>' for feature in plan.get('not_included', [])])}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
-                st.markdown(f"### {plan['name']}")
-                st.markdown(f"<div class='pricing-price'>{plan['price']}</div>", unsafe_allow_html=True)
-                st.markdown(f"<div class='pricing-period'>{plan['period']}</div>", unsafe_allow_html=True)
-                st.markdown("---")
+            st.markdown("---")
 
-                for feature in plan.get('features', []):
-                    st.markdown(f"✅ {feature}")
-                for feature in plan.get('not_included', []):
-                    st.markdown(f"❌ {feature}")
-
-                st.markdown("---")
-
-                if plan_key == 'free':
-                    if not is_authenticated():
-                        if st.button("Get Started Free", use_container_width=True, key="free_start"):
-                            st.session_state.page = 'worksheet'
-                            st.rerun()
+            if plan_key == 'free':
+                if not is_authenticated():
+                    if st.button("Get Started Free", use_container_width=True, key="free_start"):
+                        st.session_state.page = 'worksheet'
+                        st.rerun()
+            else:
+                if is_authenticated():
+                    render_payment_button(plan_key, user)
                 else:
-                    if is_authenticated():
-                        render_payment_button(plan_key, user)
-                    else:
-                        if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
-                            st.session_state.page = 'worksheet'
-                            st.rerun()
+                    if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
+                        st.session_state.page = 'worksheet'
+                        st.rerun()
 
 # ============================================
 # PAGE: HISTORY
@@ -333,6 +359,9 @@ def page_history():
             st.rerun()
         return
     
+    recent_subjects = sorted({ws['subject'] for ws in worksheets})
+    recent_topics = sorted({ws['topic'] for ws in worksheets})
+
     c1, c2, c3 = st.columns(3)
     with c1:
         st.metric("Saved resources", len(worksheets))
@@ -340,6 +369,28 @@ def page_history():
         st.metric("Curricula covered", len({ws['curriculum'] for ws in worksheets}))
     with c3:
         st.metric("Last activity", worksheets[0]['created_at'][:10])
+
+    st.markdown("### Quick actions")
+    quick_col1, quick_col2, quick_col3 = st.columns(3)
+    with quick_col1:
+        if st.button("Create another worksheet", use_container_width=True):
+            st.session_state.page = 'worksheet'
+            st.rerun()
+    with quick_col2:
+        if st.button("Open pricing", use_container_width=True):
+            st.session_state.page = 'pricing'
+            st.rerun()
+    with quick_col3:
+        if st.button("Visit lab tools", use_container_width=True):
+            st.session_state.page = 'lab'
+            st.rerun()
+
+    st.markdown("### Dashboard insights")
+    insight_col1, insight_col2 = st.columns(2)
+    with insight_col1:
+        st.info(f"📚 Most-used subjects: {', '.join(recent_subjects[:3])}")
+    with insight_col2:
+        st.info(f"🧠 Recent topics: {', '.join(recent_topics[:3])}")
 
     st.markdown(f"### {len(worksheets)} Saved Worksheets")
     
