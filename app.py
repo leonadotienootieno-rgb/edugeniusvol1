@@ -91,6 +91,26 @@ def page_worksheet():
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("""
+    <div class="workflow-grid">
+        <div class="workflow-card">
+            <div class="workflow-step">1</div>
+            <div class="workflow-title">Choose your curriculum</div>
+            <div class="workflow-copy">Pick IGCSE or IB, then the subject and topic your lesson needs.</div>
+        </div>
+        <div class="workflow-card">
+            <div class="workflow-step">2</div>
+            <div class="workflow-title">Set the format</div>
+            <div class="workflow-copy">Switch between worksheet, quick quiz, and revision pack in one click.</div>
+        </div>
+        <div class="workflow-card">
+            <div class="workflow-step">3</div>
+            <div class="workflow-title">Generate and export</div>
+            <div class="workflow-copy">Create exam-ready teaching content and download it for classroom use.</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
     st.markdown("### ⚡ Teacher shortcuts")
     shortcut_col1, shortcut_col2, shortcut_col3 = st.columns(3)
     with shortcut_col1:

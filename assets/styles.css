@@ -261,6 +261,48 @@ div[data-testid="stProgress"] > div {
     background: #FFF3EB !important;
 }
 
+/* Workflow cards */
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 20px 0;
+}
+
+.workflow-card {
+    background: white;
+    border: 1px solid #f0d1b7;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.workflow-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.workflow-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.workflow-copy {
+    color: #4b5563;
+    font-size: 0.94rem;
+    line-height: 1.5;
+}
+
 /* Pricing cards */
 .pricing-hero {
     background: linear-gradient(135deg, #FFF7F2, #FFF1E6);
@@ -396,6 +438,10 @@ div[data-testid="stProgress"] > div {
     h2 { font-size: 1.2rem !important; }
     
     .worksheet-output { padding: 16px; }
+    
+    .workflow-grid {
+        grid-template-columns: 1fr;
+    }
     
     .pricing-card { padding: 20px 16px; }
 }
