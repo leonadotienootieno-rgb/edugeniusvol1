@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Import modules
-from utils.groq_client import generate_worksheet
+from utils.groq_client import generate_worksheet, generate_quick_quiz
 from utils.pdf_generator import generate_download_button
 from utils.auth_ui import render_auth_sidebar
 from utils.auth import (
@@ -77,6 +77,18 @@ def load_syllabus(curriculum):
 # ============================================
 def page_worksheet():
     st.markdown('<h1 class="main-header">📝 AI Worksheet Generator</h1>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="feature-banner">
+        <div class="feature-banner-title">Build exam-ready teaching assets in under a minute</div>
+        <div class="feature-banner-copy">Create curriculum-aligned worksheets, marking schemes, revision packs, and classroom-ready resources from one teacher-first workflow.</div>
+        <div class="feature-banner-tags">
+            <span>IGCSE</span>
+            <span>IB</span>
+            <span>Essay</span>
+            <span>Practical</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     if not is_authenticated():
         st.info("👆 **Sign in from the sidebar** to start generating worksheets. It's free!")
@@ -106,7 +118,15 @@ def page_worksheet():
         return
     
     with st.form("worksheet_form"):
-        st.markdown("### 1. Curriculum & Subject")
+        st.markdown("### 1. Choose Your Template")
+        template_mode = st.selectbox(
+            "Template Mode",
+            ["Worksheet", "Quick Quiz", "Revision Pack"],
+            help="Pick the classroom output you want to generate.",
+            index=0
+        )
+
+        st.markdown("### 2. Curriculum & Subject")
         col1, col2 = st.columns(2)
         with col1:
             curriculum = st.selectbox("Curriculum", ["Cambridge IGCSE", "International Baccalaureate (IB)"])
@@ -116,7 +136,7 @@ def page_worksheet():
             subject = st.selectbox("Subject", subjects)
         
         if syllabus and subject:
-            st.markdown("### 2. Topic")
+            st.markdown("### 3. Topic")
             topic_data = syllabus["subjects"][subject]["topics"]
             level = st.selectbox("Level", list(topic_data.keys()))
             
@@ -130,31 +150,44 @@ def page_worksheet():
                         default=subtopics[:min(2, len(subtopics))]
                     )
         
-        st.markdown("### 3. Settings")
+        st.markdown("### 4. Settings")
         col1, col2, col3 = st.columns(3)
         with col1:
-            question_type = st.selectbox("Type", ["Mixed", "Multiple Choice", "Structured", "Essay", "Practical"])
+            if template_mode == "Quick Quiz":
+                question_type = "Multiple Choice"
+            else:
+                question_type = st.selectbox("Type", ["Mixed", "Multiple Choice", "Structured", "Essay", "Practical"])
         with col2:
-            num_questions = st.slider("Questions", 5, 30, 10, 5)
+            num_questions = st.slider("Questions", 3 if template_mode == "Quick Quiz" else 5, 30, 5 if template_mode == "Quick Quiz" else 10, 1 if template_mode == "Quick Quiz" else 5)
         with col3:
             difficulty = st.selectbox("Difficulty", ["Mixed", "Easy", "Medium", "Hard", "Exam Style"])
         
-        include_ms = st.checkbox("Include Marking Scheme", value=True)
+        include_ms = st.checkbox("Include Marking Scheme", value=template_mode != "Quick Quiz")
         
-        submitted = st.form_submit_button("🚀 Generate Worksheet", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("🚀 Generate Learning Asset", use_container_width=True, type="primary")
     
     if submitted:
-        with st.spinner("🤖 AI is creating your worksheet..."):
-            worksheet = generate_worksheet(
-                curriculum=curriculum,
-                subject=subject,
-                topic=topic,
-                subtopics=selected_subtopics if 'selected_subtopics' in locals() else [],
-                question_type=question_type,
-                num_questions=num_questions,
-                difficulty=difficulty,
-                include_marking_scheme=include_ms
-            )
+        with st.spinner("🤖 AI is creating your learning asset..."):
+            if template_mode == "Quick Quiz":
+                worksheet = generate_quick_quiz(
+                    curriculum=curriculum,
+                    subject=subject,
+                    topic=topic,
+                    num_questions=num_questions
+                )
+                loading_label = "Quick Quiz ready!"
+            else:
+                worksheet = generate_worksheet(
+                    curriculum=curriculum,
+                    subject=subject,
+                    topic=topic,
+                    subtopics=selected_subtopics if 'selected_subtopics' in locals() else [],
+                    question_type=question_type,
+                    num_questions=num_questions,
+                    difficulty=difficulty,
+                    include_marking_scheme=include_ms
+                )
+                loading_label = "Worksheet ready!"
             
             if worksheet:
                 st.session_state.current_worksheet = {
@@ -163,13 +196,14 @@ def page_worksheet():
                     'topic': topic,
                     'curriculum': curriculum,
                     'date': datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    'template_mode': template_mode,
                     'settings': {'question_type': question_type, 'num_questions': num_questions, 'difficulty': difficulty}
                 }
                 
                 increment_worksheet_count()
                 save_worksheet(curriculum, subject, topic, worksheet, question_type, difficulty)
                 
-                st.success("✅ Worksheet ready!")
+                st.success(f"✅ {loading_label}")
                 st.rerun()
             else:
                 st.error("Failed to generate. Please check your connection and try again.")
@@ -180,10 +214,11 @@ def page_worksheet():
         
         ws = st.session_state.current_worksheet
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1: st.caption(f"📚 {ws['curriculum']}")
         with col2: st.caption(f"📖 {ws['subject']} - {ws['topic']}")
-        with col3: st.caption(f"🕐 {ws['date']}")
+        with col3: st.caption(f"🧩 {ws.get('template_mode', 'Worksheet')}")
+        with col4: st.caption(f"🕐 {ws['date']}")
         
         st.text_area("", ws['text'], height=400, key="worksheet_display")
         

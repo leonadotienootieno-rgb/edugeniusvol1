@@ -65,11 +65,14 @@ Requirements:
 1. Each question should clearly state the marks available in brackets [ ]
 2. Questions should match {curriculum} exam style and format
 3. Include a mix of recall, application, and analysis questions
-4. For MCQ: provide 4 options (A-D) with one correct answer
+4. For MCQ: provide 4 options (A-D) with one correct answer and identify the correct option clearly
 5. For Practical: include data analysis, graph interpretation, or experimental design
 6. Number questions clearly (1, 2, 3...)
 7. Leave appropriate space for student answers
 8. Use proper scientific terminology and units
+9. Ensure the worksheet has a clean structure: title, learner task, question list, and a final marking scheme section when requested
+10. Avoid vague wording, unsupported claims, and irrelevant content
+11. Keep the language polished, classroom-ready, and suitable for print or digital use
 """
 
     if include_marking_scheme:

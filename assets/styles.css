@@ -36,6 +36,66 @@
     transition: all 0.3s;
 }
 
+.feature-banner {
+    background: linear-gradient(135deg, #FFF7F2, #FFF1E6);
+    border: 1px solid #FFE1CC;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+}
+
+.feature-banner-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.feature-banner-copy {
+    color: #4b5563;
+    margin-bottom: 12px;
+}
+
+.feature-banner-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.feature-banner-tags span {
+    background: rgba(255, 107, 53, 0.12);
+    color: #a13b10;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.account-card {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.12), rgba(247, 147, 30, 0.10));
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.account-pill {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.account-meta {
+    color: #374151;
+    font-size: 0.9rem;
+}
+
 .stButton > button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);

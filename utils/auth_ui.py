@@ -67,9 +67,14 @@ def _render_authenticated_user():
     tier = user_data.get('subscription_tier', 'free')
     
     st.markdown("### 👤 Account")
-    
+
     tier_badges = {'free': '🟢 Free', 'pro': '💎 Pro', 'school': '🏫 School'}
-    st.markdown(f"**{tier_badges.get(tier, '🟢 Free')} Plan**")
+    st.markdown(f"""
+    <div class="account-card">
+        <div class="account-pill">{tier_badges.get(tier, '🟢 Free')} Plan</div>
+        <div class="account-meta">Welcome back to your teacher workspace.</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     if tier == 'free':
         used = user_data.get('worksheets_generated', 0)
