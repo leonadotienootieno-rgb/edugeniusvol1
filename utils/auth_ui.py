@@ -17,11 +17,13 @@ def render_auth_sidebar():
 def _render_login_form():
     """Render login/signup form"""
     st.markdown("### 🔐 Account")
+    st.markdown("<div class='auth-help'>Sign in to unlock worksheets, history, export tools, and plan upgrades.</div>", unsafe_allow_html=True)
     
     tab1, tab2 = st.tabs(["Sign In", "Sign Up"])
     
     with tab1:
         with st.form("signin_form"):
+            st.caption("Access your teacher workspace")
             email = st.text_input("Email", key="signin_email", placeholder="teacher@school.edu")
             password = st.text_input("Password", type="password", key="signin_password")
             
@@ -40,6 +42,7 @@ def _render_login_form():
     
     with tab2:
         with st.form("signup_form"):
+            st.caption("Create your free account to start generating resources")
             full_name = st.text_input("Full Name", key="signup_name", placeholder="Mr. John Smith")
             email = st.text_input("Email", key="signup_email", placeholder="teacher@school.edu")
             password = st.text_input("Password", type="password", key="signup_password", help="At least 6 characters")

@@ -42,15 +42,27 @@ def sign_up(email: str, password: str, full_name: str = ""):
     
     try:
         user = auth.create_user_with_email_and_password(email, password)
-        
-        supabase = get_supabase_client()
-        supabase.table("users").insert({
+
+        st.session_state["local_profile"] = {
             "email": email,
-            "firebase_uid": user['localId'],
             "full_name": full_name,
             "subscription_tier": "free",
             "worksheets_generated": 0
-        }).execute()
+        }
+        st.session_state["local_worksheets"] = []
+
+        try:
+            supabase = get_supabase_client()
+            supabase.table("users").insert({
+                "email": email,
+                "firebase_uid": user['localId'],
+                "full_name": full_name,
+                "subscription_tier": "free",
+                "worksheets_generated": 0
+            }).execute()
+        except Exception:
+            # Keep account creation working even when the database profile insert is temporarily unavailable.
+            pass
         
         return user, None
     except Exception as e:
@@ -86,6 +98,10 @@ def get_user_tier():
     """Get current user's subscription tier"""
     if not is_authenticated():
         return {'subscription_tier': 'free', 'worksheets_generated': 0}
+
+    local_profile = st.session_state.get('local_profile')
+    if local_profile:
+        return local_profile
     
     supabase = get_supabase_client()
     user = st.session_state.get('firebase_user')
@@ -117,6 +133,11 @@ def increment_worksheet_count():
     """Increment user's worksheet generation count"""
     if not is_authenticated():
         return
+
+    local_profile = st.session_state.get('local_profile')
+    if local_profile:
+        local_profile['worksheets_generated'] = local_profile.get('worksheets_generated', 0) + 1
+        return
     
     supabase = get_supabase_client()
     user = st.session_state.firebase_user
@@ -133,6 +154,19 @@ def save_worksheet(curriculum, subject, topic, content, question_type="", diffic
     """Save generated worksheet to database"""
     if not is_authenticated():
         return False
+
+    local_worksheets = st.session_state.setdefault('local_worksheets', [])
+    if st.session_state.get('local_profile'):
+        local_worksheets.append({
+            "curriculum": curriculum,
+            "subject": subject,
+            "topic": topic,
+            "question_type": question_type,
+            "difficulty": difficulty,
+            "content": content,
+            "created_at": str(__import__('datetime').datetime.now())
+        })
+        return True
     
     supabase = get_supabase_client()
     user = st.session_state.firebase_user
@@ -155,12 +189,25 @@ def save_worksheet(curriculum, subject, topic, content, question_type="", diffic
             }).execute()
             return True
     except:
-        return False
+        local_worksheets.append({
+            "curriculum": curriculum,
+            "subject": subject,
+            "topic": topic,
+            "question_type": question_type,
+            "difficulty": difficulty,
+            "content": content,
+            "created_at": str(__import__('datetime').datetime.now())
+        })
+        return True
 
 def get_user_worksheets(limit=20):
     """Get user's saved worksheets"""
     if not is_authenticated():
         return []
+
+    local_worksheets = st.session_state.get('local_worksheets', [])
+    if st.session_state.get('local_profile'):
+        return local_worksheets[-limit:][::-1]
     
     supabase = get_supabase_client()
     user = st.session_state.firebase_user
@@ -180,7 +227,7 @@ def get_user_worksheets(limit=20):
                 .execute()
             return worksheets.data
     except:
-        return []
+        return local_worksheets[-limit:][::-1]
     
     return []
 
@@ -188,3 +235,5 @@ def sign_out():
     """Sign out current user"""
     st.session_state.pop('firebase_user', None)
     st.session_state.pop('user_data', None)
+    st.session_state.pop('local_profile', None)
+    st.session_state.pop('local_worksheets', None)
