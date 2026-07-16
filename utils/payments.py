@@ -72,6 +72,7 @@ def get_pricing_plans():
             'name': 'Free',
             'price': '$0',
             'period': 'forever',
+            'description': 'For individual teachers testing the workflow',
             'features': [
                 '5 worksheets per month',
                 'IGCSE & IB curricula',
@@ -89,6 +90,7 @@ def get_pricing_plans():
             'name': 'Pro',
             'price': '$9.99',
             'period': 'per month',
+            'description': 'For individual teachers who need speed and repeatability',
             'popular': True,
             'variant_id': st.secrets.get("LS_PRO_VARIANT_ID", ""),
             'features': [
@@ -107,6 +109,7 @@ def get_pricing_plans():
             'name': 'School',
             'price': '$49.99',
             'period': 'per month',
+            'description': 'For departments and schools standardizing resources',
             'variant_id': st.secrets.get("LS_SCHOOL_VARIANT_ID", ""),
             'features': [
                 'Everything in Pro',
