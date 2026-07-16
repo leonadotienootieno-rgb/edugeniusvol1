@@ -252,41 +252,35 @@ def page_pricing():
     for col, (plan_key, plan) in zip([col1, col2, col3], plans.items()):
         with col:
             is_popular = plan.get('popular', False)
-            card_class = "pricing-card featured" if is_popular else "pricing-card"
 
-            popular_badge = ""
-            if is_popular:
-                popular_badge = '<div class="pricing-badge">MOST POPULAR</div>'
+            with st.container():
+                if is_popular:
+                    st.markdown('<div class="pricing-badge">MOST POPULAR</div>', unsafe_allow_html=True)
 
-            features_html = ""
-            for feature in plan.get('features', []):
-                features_html += f"<p class='pricing-feature'>✅ {feature}</p>"
-            for feature in plan.get('not_included', []):
-                features_html += f"<p class='pricing-feature muted'>❌ {feature}</p>"
+                st.markdown(f"### {plan['name']}")
+                st.markdown(f"<div class='pricing-price'>{plan['price']}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='pricing-period'>{plan['period']}</div>", unsafe_allow_html=True)
+                st.markdown("---")
 
-            st.markdown(f"""
-            <div class="{card_class}">
-                {popular_badge}
-                <h3>{plan['name']}</h3>
-                <div class="pricing-price">{plan['price']}</div>
-                <p class="pricing-period">{plan['period']}</p>
-                <hr>
-                {features_html}
-            </div>
-            """, unsafe_allow_html=True)
+                for feature in plan.get('features', []):
+                    st.markdown(f"✅ {feature}")
+                for feature in plan.get('not_included', []):
+                    st.markdown(f"❌ {feature}")
 
-            if plan_key == 'free':
-                if not is_authenticated():
-                    if st.button("Get Started Free", use_container_width=True, key="free_start"):
-                        st.session_state.page = 'worksheet'
-                        st.rerun()
-            else:
-                if is_authenticated():
-                    render_payment_button(plan_key, user)
+                st.markdown("---")
+
+                if plan_key == 'free':
+                    if not is_authenticated():
+                        if st.button("Get Started Free", use_container_width=True, key="free_start"):
+                            st.session_state.page = 'worksheet'
+                            st.rerun()
                 else:
-                    if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
-                        st.session_state.page = 'worksheet'
-                        st.rerun()
+                    if is_authenticated():
+                        render_payment_button(plan_key, user)
+                    else:
+                        if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
+                            st.session_state.page = 'worksheet'
+                            st.rerun()
 
 # ============================================
 # PAGE: HISTORY
@@ -307,6 +301,14 @@ def page_history():
             st.rerun()
         return
     
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.metric("Saved resources", len(worksheets))
+    with c2:
+        st.metric("Curricula covered", len({ws['curriculum'] for ws in worksheets}))
+    with c3:
+        st.metric("Last activity", worksheets[0]['created_at'][:10])
+
     st.markdown(f"### {len(worksheets)} Saved Worksheets")
     
     for ws in worksheets:
