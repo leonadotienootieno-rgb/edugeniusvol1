@@ -373,7 +373,12 @@ def page_history():
     worksheets = get_user_worksheets()
     
     if not worksheets:
-        st.info("No worksheets yet. Generate your first one!")
+        st.markdown("""
+        <div class="history-empty-card">
+            <div class="history-title">Your teaching workspace is ready</div>
+            <div class="history-copy">Create your first worksheet and it will appear here with quick reuse actions and export options.</div>
+        </div>
+        """, unsafe_allow_html=True)
         if st.button("Create Worksheet", use_container_width=True):
             st.session_state.page = 'worksheet'
             st.rerun()
@@ -381,6 +386,13 @@ def page_history():
     
     recent_subjects = sorted({ws['subject'] for ws in worksheets})
     recent_topics = sorted({ws['topic'] for ws in worksheets})
+
+    st.markdown("""
+    <div class="history-hero">
+        <div class="history-title">Your teaching workspace</div>
+        <div class="history-copy">Review recent resources, reopen past topics, and keep your classroom prep flowing without starting from scratch.</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
     with c1:
@@ -411,6 +423,14 @@ def page_history():
         st.info(f"📚 Most-used subjects: {', '.join(recent_subjects[:3])}")
     with insight_col2:
         st.info(f"🧠 Recent topics: {', '.join(recent_topics[:3])}")
+
+    if st.session_state.get('current_worksheet'):
+        last_ws = st.session_state.current_worksheet
+        st.markdown("### Continue from your most recent draft")
+        st.markdown(f"• {last_ws['curriculum']} · {last_ws['subject']} · {last_ws['topic']} ({last_ws['template_mode']})")
+        if st.button("Resume last draft", use_container_width=True, type="primary"):
+            st.session_state.page = 'worksheet'
+            st.rerun()
 
     st.markdown(f"### {len(worksheets)} Saved Worksheets")
     
