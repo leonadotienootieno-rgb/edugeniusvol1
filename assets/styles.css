@@ -268,6 +268,29 @@ div[data-testid="stProgress"] > div {
     color: #4b5563;
 }
 
+.school-highlight {
+    background: linear-gradient(135deg, #1f2937, #374151);
+    color: white;
+    border-radius: 18px;
+    padding: 18px;
+    font-weight: 700;
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.school-cta {
+    background: linear-gradient(135deg, #FFF3EB, #FFE8D6);
+    border: 1px solid #FFD3B0;
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin: 12px 0 18px 0;
+    color: #4b5563;
+    font-weight: 600;
+}
+
 .pricing-card {
     border: 1px solid #e5e7eb;
     background: rgba(255,255,255,0.96);

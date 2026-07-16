@@ -247,6 +247,38 @@ def page_pricing():
     </div>
     """, unsafe_allow_html=True)
 
+    school_col, value_col = st.columns([1.3, 0.7])
+    with school_col:
+        st.markdown("### 🏫 School & Department Pack")
+        st.markdown("Use EduGenius to standardize worksheet creation across departments, save prep time, and centralize classroom resource quality.")
+        st.markdown("- Shared worksheet bank")
+        st.markdown("- Department-wide collaboration")
+        st.markdown("- Admin and billing visibility")
+        st.markdown("- Teacher seat management")
+    with value_col:
+        st.markdown("<div class='school-highlight'>Best for schools, departments, and curriculum leaders.</div>", unsafe_allow_html=True)
+
+    st.markdown("---")
+    trust_col1, trust_col2, trust_col3 = st.columns(3)
+    with trust_col1:
+        st.metric("Time saved", "8+ hrs/week")
+    with trust_col2:
+        st.metric("Teacher seats", "5 included")
+    with trust_col3:
+        st.metric("Value focus", "Consistency")
+
+    st.markdown("---")
+    st.markdown("### Why schools upgrade")
+    st.markdown("- Standardize worksheets across a department")
+    st.markdown("- Reduce repetitive prep time for every teacher")
+    st.markdown("- Keep curriculum-aligned resources reusable and high quality")
+    st.markdown("- Scale from one teacher to a whole school workflow")
+
+    school_demo = st.container()
+    with school_demo:
+        st.markdown("<div class='school-cta'>School leaders can request rollout support, admin onboarding, and department-level adoption guidance.</div>", unsafe_allow_html=True)
+        st.link_button("Request School Demo", "mailto:schools@edugenius.app?subject=EduGenius%20School%20Demo")
+
     col1, col2, col3 = st.columns(3)
 
     for col, (plan_key, plan) in zip([col1, col2, col3], plans.items()):
