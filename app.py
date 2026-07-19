@@ -6,6 +6,7 @@ With Real Authentication & Global Payments
 
 import streamlit as st
 import json
+import urllib.parse
 from pathlib import Path
 from datetime import datetime
 
@@ -48,6 +49,7 @@ def init_session():
         'page': 'worksheet',
         'current_worksheet': None,
         'active_template_mode': 'Worksheet',
+        'school_rollout': None,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -127,16 +129,32 @@ def page_worksheet():
             st.rerun()
     
     if not is_authenticated():
-        st.info("👆 **Sign in from the sidebar** to start generating worksheets. It's free!")
+        st.markdown("""
+        <div class="value-strip">
+            <div class="value-strip-title">Create your teacher workspace in 30 seconds</div>
+            <div class="value-strip-copy">Sign in from the sidebar, choose your curriculum, and generate classroom-ready assets without spending time building content from scratch.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        cta_col1, cta_col2 = st.columns(2)
+        with cta_col1:
+            if st.button("Start Free", use_container_width=True, type="primary"):
+                st.session_state.page = 'worksheet'
+                st.rerun()
+        with cta_col2:
+            if st.button("View Pricing", use_container_width=True):
+                st.session_state.page = 'pricing'
+                st.rerun()
+
         st.markdown("---")
-        st.markdown("### Why teachers love EduGenius")
+        st.markdown("### Why teachers choose EduGenius")
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.markdown("🎯 **Exam-aligned**\nIGCSE & IB format")
+            st.markdown("<div class='value-card'><div class='value-label'>🎯 Exam-aligned</div><div class='value-copy'>IGCSE & IB workflows built for classroom consistency.</div></div>", unsafe_allow_html=True)
         with col2:
-            st.markdown("⚡ **Save hours**\nGenerate in seconds")
+            st.markdown("<div class='value-card'><div class='value-label'>⚡ Save hours</div><div class='value-copy'>Go from topic to teaching resource in a single flow.</div></div>", unsafe_allow_html=True)
         with col3:
-            st.markdown("🆓 **5 free worksheets**\nNo credit card needed")
+            st.markdown("<div class='value-card'><div class='value-label'>🆓 Free to start</div><div class='value-copy'>5 worksheets monthly with no payment required.</div></div>", unsafe_allow_html=True)
         return
     
     if not can_generate_worksheet():
@@ -272,6 +290,50 @@ def page_worksheet():
             st.info(f"💡 Fast reuse: your last asset was a {ws['template_mode']} for {ws['subject']} / {ws['topic']}. Pick a shortcut above to continue building from that workflow.")
 
 # ============================================
+# COMPONENT: PRICING CARD
+# ============================================
+def render_pricing_card(plan_key, plan, user_signed_in):
+    """Render a single pricing card with a consistent premium action flow."""
+    is_popular = plan.get('popular', False)
+    card_class = "pricing-card featured" if is_popular else "pricing-card"
+
+    feature_markup = ''.join([
+        f'<div class="pricing-feature">✅ {feature}</div>'
+        for feature in plan.get('features', [])
+    ])
+    excluded_markup = ''.join([
+        f'<div class="pricing-feature muted">❌ {feature}</div>'
+        for feature in plan.get('not_included', [])
+    ])
+
+    st.markdown(f"""
+    <div class="{card_class}">
+        <div class="pricing-badge">{'MOST POPULAR' if is_popular else plan['name'].upper()}</div>
+        <h3>{plan['name']}</h3>
+        <div class="pricing-price">{plan['price']}</div>
+        <div class="pricing-period">{plan['period']}</div>
+        <div class="pricing-description">{plan.get('description', '')}</div>
+        <hr>
+        <div class="pricing-list">{feature_markup}{excluded_markup}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    if plan_key == 'free':
+        if not user_signed_in:
+            if st.button("Get Started Free", use_container_width=True, key=f"free_start_{plan_key}"):
+                st.session_state.page = 'worksheet'
+                st.rerun()
+    else:
+        if user_signed_in:
+            render_payment_button(plan_key, st.session_state.get('firebase_user'))
+        else:
+            if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
+                st.session_state.page = 'worksheet'
+                st.rerun()
+
+    st.markdown("---")
+
+# ============================================
 # PAGE: PRICING
 # ============================================
 def page_pricing():
@@ -279,7 +341,6 @@ def page_pricing():
     st.markdown('<p class="sub-header">Start with 5 free worksheets. Upgrade when you need more power, export, and automation.</p>', unsafe_allow_html=True)
 
     plans = get_pricing_plans()
-    user = st.session_state.get('firebase_user')
 
     st.markdown("""
     <div class="pricing-hero">
@@ -315,50 +376,107 @@ def page_pricing():
     st.markdown("- Keep curriculum-aligned resources reusable and high quality")
     st.markdown("- Scale from one teacher to a whole school workflow")
 
-    school_demo = st.container()
-    with school_demo:
-        st.markdown("<div class='school-cta'>School leaders can request rollout support, admin onboarding, and department-level adoption guidance.</div>", unsafe_allow_html=True)
-        st.link_button("Request School Demo", "mailto:schools@edugenius.app?subject=EduGenius%20School%20Demo")
+    st.markdown("""
+    <div class="demo-card">
+        <div class="demo-card-title">School rollout support</div>
+        <div class="demo-card-copy">School leaders can request onboarding, department rollout guidance, admin setup, and a guided demo for multi-teacher adoption.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with st.form("school_demo_form"):
+        st.markdown("### 🏫 Request a department demo")
+        demo_col1, demo_col2 = st.columns(2)
+        with demo_col1:
+            school_name = st.text_input("School / Department", placeholder="Nairobi International School")
+            contact_name = st.text_input("Your Name", placeholder="Head of Science")
+        with demo_col2:
+            email = st.text_input("Work Email", placeholder="admin@school.edu")
+            teacher_seats = st.number_input("Estimated teacher seats", min_value=1, max_value=500, value=10)
+
+        message = st.text_area(
+            "What are you hoping to improve?",
+            placeholder="We want standardized worksheets across our science department and faster prep for 30 teachers.",
+            height=120
+        )
+
+        submitted = st.form_submit_button("Request School Demo", use_container_width=True, type="primary")
+
+    if submitted:
+        params = urllib.parse.urlencode({
+            'subject': 'EduGenius School Demo Request',
+            'body': (
+                f"School / Department: {school_name}\n"
+                f"Contact Name: {contact_name}\n"
+                f"Work Email: {email}\n"
+                f"Estimated Teacher Seats: {teacher_seats}\n\n"
+                f"Need / Goal:\n{message}"
+            )
+        })
+        demo_mailto = f"mailto:schools@edugenius.app?{params}"
+        st.success("✅ Your demo request is ready. Use the link below to send it to the EduGenius team.")
+        st.markdown(f"<a class='demo-link' href='{demo_mailto}'>📩 Open email draft</a>", unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("### 🏫 School rollout workspace")
+    rollout = st.session_state.get('school_rollout')
+
+    if rollout:
+        st.markdown("""
+        <div class="rollout-panel">
+            <div class="demo-card-title">Admin overview</div>
+            <div class="demo-card-copy">Use this workspace to review the rollout shape, teacher seat plan, and department readiness before you commit to a broader launch.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        rollout_col1, rollout_col2, rollout_col3 = st.columns(3)
+        with rollout_col1:
+            st.metric("Department", rollout['department'])
+        with rollout_col2:
+            st.metric("Seats", rollout['seats'])
+        with rollout_col3:
+            st.metric("Phase", rollout['phase'])
+
+        readiness_col1, readiness_col2 = st.columns(2)
+        with readiness_col1:
+            st.markdown("### Readiness checklist")
+            st.checkbox("Curriculum mapping complete", value=True)
+            st.checkbox("Teacher pilot cohort confirmed", value=True)
+            st.checkbox("Department template standards selected", value=True)
+        with readiness_col2:
+            st.markdown("### Rollout milestones")
+            st.markdown("1. Pilot group onboarding")
+            st.markdown("2. Weekly content review")
+            st.markdown("3. Department-wide launch")
+            st.markdown(f"Assigned admin: **{rollout['owner']}**")
+
+    with st.form("school_rollout_form"):
+        rollout_col1, rollout_col2 = st.columns(2)
+        with rollout_col1:
+            rollout_department = st.text_input("Department name", placeholder="Science Department")
+            rollout_seats = st.number_input("Seat allocation target", min_value=1, max_value=500, value=10)
+        with rollout_col2:
+            rollout_phase = st.selectbox("Rollout phase", ["Pilot", "Department rollout", "School-wide launch"])
+            rollout_owner = st.text_input("Assigned admin", placeholder="Curriculum Lead")
+
+        if st.form_submit_button("Save rollout plan", use_container_width=True, type="primary"):
+            st.session_state.school_rollout = {
+                'department': rollout_department or 'Science Department',
+                'seats': rollout_seats,
+                'phase': rollout_phase,
+                'owner': rollout_owner or 'Curriculum Lead',
+            }
+            st.success("✅ School rollout plan saved for this session.")
+            st.rerun()
 
     st.markdown("---")
     st.markdown("### Choose the plan that fits your classroom")
 
     col1, col2, col3 = st.columns(3)
+    user_signed_in = is_authenticated()
 
     for col, (plan_key, plan) in zip([col1, col2, col3], plans.items()):
         with col:
-            is_popular = plan.get('popular', False)
-            card_class = "pricing-card featured" if is_popular else "pricing-card"
-
-            st.markdown(f"""
-            <div class="{card_class}">
-                <div class="pricing-badge">{'MOST POPULAR' if is_popular else plan['name'].upper()}</div>
-                <h3>{plan['name']}</h3>
-                <div class="pricing-price">{plan['price']}</div>
-                <div class="pricing-period">{plan['period']}</div>
-                <div style="color:#6b7280; margin-bottom:16px;">{plan.get('description', '')}</div>
-                <hr>
-                <div style="text-align:left;">
-                    {''.join([f'<div class="pricing-feature">✅ {feature}</div>' for feature in plan.get('features', [])])}
-                    {''.join([f'<div class="pricing-feature">❌ {feature}</div>' for feature in plan.get('not_included', [])])}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.markdown("---")
-
-            if plan_key == 'free':
-                if not is_authenticated():
-                    if st.button("Get Started Free", use_container_width=True, key="free_start"):
-                        st.session_state.page = 'worksheet'
-                        st.rerun()
-            else:
-                if is_authenticated():
-                    render_payment_button(plan_key, user)
-                else:
-                    if st.button(f"Sign Up for {plan['name']}", use_container_width=True, key=f"signup_{plan_key}"):
-                        st.session_state.page = 'worksheet'
-                        st.rerun()
+            render_pricing_card(plan_key, plan, user_signed_in)
 
 # ============================================
 # PAGE: HISTORY
@@ -401,6 +519,29 @@ def page_history():
         st.metric("Curricula covered", len({ws['curriculum'] for ws in worksheets}))
     with c3:
         st.metric("Last activity", worksheets[0]['created_at'][:10])
+
+    st.markdown("### Reuse your most recent workflow")
+    recent_subject = worksheets[0]['subject']
+    recent_topic = worksheets[0]['topic']
+    recent_curriculum = worksheets[0]['curriculum']
+    reuse_col1, reuse_col2, reuse_col3 = st.columns(3)
+    with reuse_col1:
+        if st.button("📘 Continue with last topic", use_container_width=True, type="primary"):
+            st.session_state.page = 'worksheet'
+            st.session_state.active_template_mode = 'Worksheet'
+            st.rerun()
+    with reuse_col2:
+        if st.button("🧠 Create quick quiz", use_container_width=True):
+            st.session_state.page = 'worksheet'
+            st.session_state.active_template_mode = 'Quick Quiz'
+            st.rerun()
+    with reuse_col3:
+        if st.button("📝 Build revision pack", use_container_width=True):
+            st.session_state.page = 'worksheet'
+            st.session_state.active_template_mode = 'Revision Pack'
+            st.rerun()
+
+    st.markdown(f"<div class='reuse-strip'>Recent teaching pattern: {recent_curriculum} · {recent_subject} · {recent_topic}</div>", unsafe_allow_html=True)
 
     st.markdown("### Quick actions")
     quick_col1, quick_col2, quick_col3 = st.columns(3)
