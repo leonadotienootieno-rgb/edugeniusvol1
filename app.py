@@ -50,6 +50,7 @@ def init_session():
         'current_worksheet': None,
         'active_template_mode': 'Worksheet',
         'school_rollout': None,
+        'school_teacher_invites': [],
     }
     for key, value in defaults.items():
         if key not in st.session_state:
@@ -467,6 +468,49 @@ def page_pricing():
             }
             st.success("✅ School rollout plan saved for this session.")
             st.rerun()
+
+    st.markdown("---")
+    st.markdown("### 👥 Invite teacher cohort")
+    invites = st.session_state.get('school_teacher_invites', [])
+
+    summary_seats = st.session_state.get('school_rollout', {}).get('seats', 10) if st.session_state.get('school_rollout') else 10
+    invite_count = len(invites)
+    seat_utilization = min(invite_count / max(summary_seats, 1), 1.0)
+
+    dashboard_col1, dashboard_col2, dashboard_col3 = st.columns(3)
+    with dashboard_col1:
+        st.metric("Invited teachers", invite_count)
+    with dashboard_col2:
+        st.metric("Seat target", summary_seats)
+    with dashboard_col3:
+        st.metric("Coverage", f"{round(seat_utilization * 100)}%")
+
+    st.progress(seat_utilization, text="Teacher seat rollout status")
+
+    with st.form("teacher_invite_form"):
+        invite_col1, invite_col2 = st.columns(2)
+        with invite_col1:
+            invite_email = st.text_input("Teacher email", placeholder="teacher@school.edu")
+        with invite_col2:
+            invite_role = st.selectbox("Role", ["Teacher", "Department Lead", "Admin"])
+
+        if st.form_submit_button("Add invite", use_container_width=True):
+            if invite_email:
+                invites.append({
+                    'email': invite_email,
+                    'role': invite_role,
+                })
+                st.session_state.school_teacher_invites = invites
+                st.success("✅ Teacher invite added to the rollout workspace.")
+                st.rerun()
+            else:
+                st.warning("Please enter a teacher email.")
+
+    if invites:
+        st.markdown("<div class='invite-list'>", unsafe_allow_html=True)
+        for invite in invites:
+            st.markdown(f"<div class='invite-pill'>{invite['email']} · {invite['role']}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("### Choose the plan that fits your classroom")

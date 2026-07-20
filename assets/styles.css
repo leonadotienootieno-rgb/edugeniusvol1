@@ -377,6 +377,24 @@ div[data-testid="stProgress"] > div {
     margin: 8px 0 16px 0;
 }
 
+.invite-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0 14px 0;
+}
+
+.invite-pill {
+    display: inline-block;
+    background: rgba(255, 107, 53, 0.12);
+    color: #8a3d12;
+    border: 1px solid rgba(255, 107, 53, 0.24);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
 [data-testid="stMetric"] {
     border: 1px solid #f0d1b7;
     border-radius: 16px;
