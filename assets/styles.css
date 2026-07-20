@@ -542,6 +542,35 @@ div[data-testid="stProgress"] > div {
     font-weight: 700;
 }
 
+.analytics-strip {
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin: 12px 0 18px 0;
+    font-weight: 700;
+}
+
+.admin-dashboard {
+    background: linear-gradient(135deg, #FFF7F2, #FFF1E6);
+    border: 1px solid #FFE0C8;
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.admin-dashboard-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.admin-dashboard-copy {
+    color: #4b5563;
+    line-height: 1.6;
+}
+
 .history-title {
     font-size: 1.08rem;
     font-weight: 800;

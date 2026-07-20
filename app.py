@@ -564,6 +564,31 @@ def page_history():
     with c3:
         st.metric("Last activity", worksheets[0]['created_at'][:10])
 
+    template_counts = {
+        'Worksheet': 0,
+        'Quick Quiz': 0,
+        'Revision Pack': 0
+    }
+    curriculum_counts = {}
+    for ws in worksheets:
+        template_mode = ws.get('template_mode', 'Worksheet')
+        template_counts[template_mode] = template_counts.get(template_mode, 0) + 1
+        curriculum = ws.get('curriculum', 'Unknown')
+        curriculum_counts[curriculum] = curriculum_counts.get(curriculum, 0) + 1
+
+    top_curriculum = max(curriculum_counts, key=curriculum_counts.get)
+
+    st.markdown("### Teaching analytics")
+    analytics_col1, analytics_col2, analytics_col3 = st.columns(3)
+    with analytics_col1:
+        st.metric("Worksheets", template_counts.get('Worksheet', 0))
+    with analytics_col2:
+        st.metric("Quick quizzes", template_counts.get('Quick Quiz', 0))
+    with analytics_col3:
+        st.metric("Revision packs", template_counts.get('Revision Pack', 0))
+
+    st.markdown(f"<div class='analytics-strip'>Most active curriculum: <strong>{top_curriculum}</strong> with {curriculum_counts[top_curriculum]} resources</div>", unsafe_allow_html=True)
+
     st.markdown("### Reuse your most recent workflow")
     recent_subject = worksheets[0]['subject']
     recent_topic = worksheets[0]['topic']
@@ -627,6 +652,86 @@ def page_history():
             generate_download_button(ws['content'], ws['subject'], ws['topic'], ws['curriculum'])
 
 # ============================================
+# PAGE: SCHOOL ADMIN DASHBOARD
+
+def page_school_admin():
+    st.markdown('<h1 class="main-header">🏫 School Admin Dashboard</h1>', unsafe_allow_html=True)
+
+    if not is_authenticated():
+        st.info("Sign in to access the school admin workspace and rollout analytics.")
+        return
+
+    worksheets = get_user_worksheets()
+    invites = st.session_state.get('school_teacher_invites', [])
+    rollout = st.session_state.get('school_rollout') or {}
+    seat_target = rollout.get('seats', 10)
+    invite_count = len(invites)
+    template_counts = {'Worksheet': 0, 'Quick Quiz': 0, 'Revision Pack': 0}
+    curriculum_counts = {}
+
+    for ws in worksheets:
+        mode = ws.get('template_mode', 'Worksheet')
+        template_counts[mode] = template_counts.get(mode, 0) + 1
+        curriculum = ws.get('curriculum', 'Unknown')
+        curriculum_counts[curriculum] = curriculum_counts.get(curriculum, 0) + 1
+
+    top_curriculum = max(curriculum_counts, key=curriculum_counts.get) if curriculum_counts else 'None yet'
+    progress_value = min(invite_count / max(seat_target, 1), 1.0)
+
+    st.markdown("""
+    <div class="admin-dashboard">
+        <div class="admin-dashboard-title">Manage your school rollout and teacher adoption from one place.</div>
+        <div class="admin-dashboard-copy">Track invite progress, worksheet adoption, and curriculum focus. This dashboard is designed for department leads and school admins.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    summary_col1, summary_col2, summary_col3 = st.columns(3)
+    with summary_col1:
+        st.metric("Invited teachers", invite_count)
+    with summary_col2:
+        st.metric("Seat target", seat_target)
+    with summary_col3:
+        st.metric("Worksheets created", len(worksheets))
+
+    st.markdown(f"<div class='analytics-strip'>Most active curriculum: <strong>{top_curriculum}</strong></div>", unsafe_allow_html=True)
+    st.progress(progress_value, text="Teacher invite coverage")
+
+    st.markdown("### Rollout status")
+    phase = rollout.get('phase', 'Not configured')
+    owner = rollout.get('owner', 'Not assigned')
+    department = rollout.get('department', 'Not configured')
+
+    status_col1, status_col2, status_col3 = st.columns(3)
+    with status_col1:
+        st.metric("Department", department)
+    with status_col2:
+        st.metric("Phase", phase)
+    with status_col3:
+        st.metric("Owner", owner)
+
+    if invites:
+        st.markdown("### Invited cohort")
+        st.markdown("<div class='invite-list'>", unsafe_allow_html=True)
+        for invite in invites:
+            st.markdown(f"<div class='invite-pill'>{invite['email']} · {invite['role']}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("### School analytics")
+    analytics_col1, analytics_col2 = st.columns(2)
+    with analytics_col1:
+        st.info(f"📊 Templates used: Worksheets {template_counts['Worksheet']}, Quizzes {template_counts['Quick Quiz']}, Revision {template_counts['Revision Pack']}")
+    with analytics_col2:
+        st.info(f"📚 Curricula active: {', '.join([f'{k} ({v})' for k,v in curriculum_counts.items()][:3])}")
+
+    if st.button("Open worksheet history", use_container_width=True):
+        st.session_state.page = 'history'
+        st.rerun()
+
+    if st.button("Visit pricing & plans", use_container_width=True):
+        st.session_state.page = 'pricing'
+        st.rerun()
+
+# ============================================
 # PAGE: LAB ASSISTANT
 # ============================================
 def page_lab():
@@ -677,6 +782,9 @@ def main():
         if st.button("💎 Pricing", use_container_width=True):
             st.session_state.page = 'pricing'
             st.rerun()
+        if st.button("🏫 School Admin", use_container_width=True):
+            st.session_state.page = 'school_admin'
+            st.rerun()
         
         st.markdown("---")
         st.caption("© 2024 EduGenius")
@@ -686,6 +794,7 @@ def main():
         'history': page_history,
         'lab': page_lab,
         'pricing': page_pricing,
+        'school_admin': page_school_admin,
     }
     
     current_page = st.session_state.get('page', 'worksheet')
